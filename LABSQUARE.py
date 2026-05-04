@@ -1,13 +1,4 @@
-"""
-Moving Squares Simulation – Time‑Based with Mouse‑Toggleable Indicators
 
-- Mixed squares: 5x25, 10x10, 30x4 (Exercise 1)
-- Speed inversely proportional to size (time‑based)
-- Jitter, fleeing, chasing, lifespan + rebirth
-- Two clickable buttons (mouse) to toggle perception circle and velocity vector
-- Velocity vector: fixed length, starts from circle edge, same colour as circle
-- All original time‑based logic unchanged
-"""
 
 import math
 import random
@@ -16,7 +7,7 @@ from typing import List, Dict, Any
 
 import pygame
 
-# ========== Constants (unchanged) ==========
+# Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 NUM_SQUARES = 45                     # 5+10+30 (Exercise 1)
@@ -33,10 +24,10 @@ LIFE_MIN_SEC = 15.0
 LIFE_MAX_SEC = 30.0
 BACKGROUND_COLOR = (20, 20, 30)
 
-# Visual settings
+#Visual
 CIRCLE_ALPHA = 80
-INDICATOR_COLOR = (255, 255, 255)    # white for both circle and vector
-VECTOR_FIXED_LENGTH = -40             # pixels, independent of square size
+INDICATOR_COLOR = (255, 255, 255)    
+VECTOR_FIXED_LENGTH = -40             
 BUTTON_WIDTH = 180
 BUTTON_HEIGHT = 30
 BUTTON_MARGIN = 10
@@ -44,11 +35,11 @@ BUTTON_MARGIN = 10
 FPS = 60
 MAX_DT = 0.1
 
-# ========== Global Toggle States ==========
+
 show_perception_circle = True
 show_velocity_vector = True
 
-# Button rectangles
+
 button_circle = None
 button_vector = None
 
@@ -84,6 +75,17 @@ def create_mixed_squares() -> List[Dict[str, Any]]:
     for _ in range(30):
         squares.append(create_square_with_fixed_size(4))
     return squares
+
+def _screen_wrap(square: Dict[str, Any]) -> None:
+    size = square["size"]
+    if square["x"] + size < 0:
+        square["x"] = SCREEN_WIDTH
+    elif square["x"] > SCREEN_WIDTH:
+        square["x"] = -size
+    if square["y"] + size < 0:
+        square["y"] = SCREEN_HEIGHT
+    elif square["y"] > SCREEN_HEIGHT:
+        square["y"] = -size
 
 # ---------- update_square (unchanged, time‑based) ----------
 def update_square(square: Dict[str, Any], dt: float, all_squares: List[Dict[str, Any]]) -> None:
